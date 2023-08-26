@@ -41,6 +41,7 @@ tables
 
 import pyspark
 from pyspark.sql import SparkSession
+from delta.tables import *
 
 
 database_host = "psql-mock-database-cloud.postgres.database.azure.com"
@@ -123,7 +124,7 @@ for table in tables:
 
     #dfUpdates = deltaTableCustomersUpdates.toDF()
 
-    deltaTableCustomers.alias(table) \
+    globals()['delta_table_%s' % table].alias(table) \
     .merge(
         dfUpdates.alias('updates'),
         '{}.{} = updates.{}'. format(table,PK[table],PK[table])
