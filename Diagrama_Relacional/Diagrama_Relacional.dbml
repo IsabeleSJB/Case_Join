@@ -1,0 +1,104 @@
+Table "offices"
+{
+    office_code varchar(10) [pk]
+    city varchar(50)
+    phone varchar(50)
+    address_line1 varchar(50)
+    address_line2 varchar(50)
+    state varchar(50)
+    country varchar(50)
+    postal_code varchar(15)
+    territory varchar(10)
+}
+
+Table "employees"
+{
+    employee_number int [pk]
+    last_name varchar(50)
+    first_name varchar(50)
+    extension varchar(10)
+    email varchar(100)
+    office_code varchar(10)
+    reports_to int
+    job_Title varchar(50)
+}
+Table "customers"
+{
+
+    customer_number int [pk]
+    customer_name varchar(50)
+    contact_last_name varchar(50)
+    contact_first_name varchar(50)
+    phone varchar(50)
+    adress_line1 varchar(50)
+    adress_line2 varchar(50)
+    city varchar(50)
+    state varchar(50)
+    postal_code varchar(15)
+    country varchar(50)
+    sales_rep_employee_number int
+    credit_limit numeric(10)
+}
+
+Table "payments"
+{
+    customer_number int [pk]
+    check_number  varchar(50)
+    payment_date date
+    amount numeric(10)
+}
+
+Table "orders"
+{
+
+    order_number int [pk]
+    order_date date
+    required_date date
+    shipped_date date
+    status varchar(15)
+    comments text
+    customer_number int
+}
+
+Table "orderdetails"
+{
+
+    order_number int [pk]
+    product_code varchar(15)
+    quantity_ordered int
+    price_each numeric(10)
+    order_line_number smallint 
+    
+}
+
+Table "products"
+{
+    product_code varchar(15) [pk]
+    product_name varchar(70)
+    product_line varchar(50)
+    product_scale varchar(10)
+    product_vendor varchar(50)
+    product_description text
+    quantity_in_stock smallint
+    buy_price numeric(10)
+    msrp numeric(10)
+
+}
+
+Table "product_lines"
+{
+    product_line varchar(50) [pk]
+    text_description varchar(4000)
+    html_description text
+    image bytea
+
+}
+
+
+Ref: "employees".(office_code) > "offices".(office_code)
+Ref: "customers".(sales_rep_employee_number) > "employees".(employee_number)
+Ref: "payments".(customer_number) > "customers".(customer_number)
+Ref: "orders".(customer_number) > "customers".(customer_number)
+Ref: "orderdetails".(order_number) > "orders".(order_number)
+Ref: "orderdetails".(product_code) > "products".(product_code)
+Ref: "product_lines".(product_line) > "products".( product_line)
